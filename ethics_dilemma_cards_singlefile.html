@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>倫理兩難情境案例卡｜抽卡系統</title>
+  <style>
+    :root {
+      --bg: #f8fafc;
+      --card: #ffffff;
+      --text: #0f172a;
+      --muted: #64748b;
+      --line: #e2e8f0;
+      --dark1: #0f172a;
+      --dark2: #1e293b;
+      --dark3: #334155;
+      --accent: #111827;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans TC",
+        "PingFang TC", "Microsoft JhengHei", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+    .wrap {
+      max-width: 1160px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+    .top {
+      display: flex;
+      gap: 16px;
+      justify-content: space-between;
+      align-items: end;
+      flex-wrap: wrap;
+      margin-bottom: 24px;
+    }
+    .eyebrow {
+      color: var(--muted);
+      font-size: 14px;
+      font-weight: 600;
+      margin: 0 0 8px;
+    }
+    h1 {
+      margin: 0;
+      font-size: clamp(28px, 4vw, 42px);
+      line-height: 1.15;
+    }
+    .sub {
+      margin: 12px 0 0;
+      color: var(--muted);
+      line-height: 1.7;
+      font-size: 16px;
+      max-width: 760px;
+    }
+    .stat {
+      background: white;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 12px 16px;
+      color: #475569;
+      font-weight: 600;
+      white-space: nowrap;
+      box-shadow: 0 6px 20px rgba(15,23,42,.05);
+    }
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+    button {
+      border: 0;
+      border-radius: 18px;
+      padding: 14px 18px;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform .12s ease, opacity .12s ease, background .12s ease;
+    }
+    button:hover { transform: translateY(-1px); }
+    button:active { transform: translateY(0); }
+    .primary { background: var(--accent); color: white; }
+    .secondary { background: #e2e8f0; color: #0f172a; }
+    .outline { background: white; color: #0f172a; border: 1px solid var(--line); }
+    .grid {
+      display: grid;
+      grid-template-columns: 1.45fr .85fr;
+      gap: 24px;
+    }
+    .panel {
+      background: white;
+      border: 1px solid var(--line);
+      border-radius: 32px;
+      box-shadow: 0 20px 45px rgba(15,23,42,.08);
+      overflow: hidden;
+    }
+    .panel.dark {
+      background: linear-gradient(135deg, var(--dark1), var(--dark2), var(--dark3));
+      color: white;
+      border: 0;
+    }
+    .head {
+      padding: 28px 28px 10px;
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: .08em;
+      padding: 8px 12px;
+      border-radius: 999px;
+      margin-bottom: 14px;
+    }
+    .light .badge {
+      background: #f1f5f9;
+      color: #475569;
+    }
+    .dark .badge {
+      background: rgba(255,255,255,.12);
+      color: rgba(255,255,255,.92);
+    }
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+    .chip {
+      padding: 7px 11px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+    .light .chip {
+      background: #f1f5f9;
+      color: #475569;
+    }
+    .dark .chip {
+      background: rgba(255,255,255,.12);
+      color: rgba(255,255,255,.92);
+    }
+    .title {
+      font-size: clamp(28px, 3vw, 38px);
+      line-height: 1.25;
+      margin: 0;
+    }
+    .body {
+      padding: 10px 28px 28px;
+    }
+    .box {
+      border-radius: 28px;
+      padding: 24px;
+      line-height: 1.95;
+      font-size: 18px;
+    }
+    .light .box {
+      background: #f8fafc;
+      color: #334155;
+    }
+    .dark .box {
+      background: rgba(255,255,255,.06);
+      color: white;
+      border: 1px solid rgba(255,255,255,.12);
+    }
+    .label {
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: .18em;
+      margin-bottom: 12px;
+      text-transform: uppercase;
+    }
+    .light .label { color: #64748b; }
+    .dark .label { color: rgba(255,255,255,.72); }
+    .note {
+      margin-top: 16px;
+      font-size: 14px;
+      line-height: 1.8;
+    }
+    .light .note { color: #64748b; }
+    .dark .note { color: rgba(255,255,255,.72); }
+    .side {
+      display: grid;
+      gap: 18px;
+      align-content: start;
+    }
+    .mini {
+      background: white;
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      box-shadow: 0 12px 30px rgba(15,23,42,.06);
+      padding: 22px;
+    }
+    .mini h2 {
+      margin: 0 0 12px;
+      font-size: 22px;
+    }
+    .mini p {
+      margin: 8px 0;
+      color: #475569;
+      line-height: 1.8;
+      font-size: 15px;
+    }
+    .fade {
+      animation: fade .22s ease;
+    }
+    @keyframes fade {
+      from { opacity: .35; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @media (max-width: 920px) {
+      .grid { grid-template-columns: 1fr; }
+      .wrap { padding: 16px; }
+      .head { padding: 22px 20px 8px; }
+      .body { padding: 8px 20px 22px; }
+      .box { padding: 18px; font-size: 17px; }
+      button { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="top">
+      <div>
+        <p class="eyebrow">倫理兩難情境案例卡｜可離線單檔版</p>
+        <h1>按一下抽一張，先讀情境，再翻看價值衝突</h1>
+        <p class="sub">這個版本可直接分享給其他人使用，不需登入。雙擊開啟 HTML 檔即可使用，也可上傳到任何靜態網站。</p>
+      </div>
+      <div class="stat" id="progressText">已抽過 0 / 13 張｜剩餘 13 張</div>
+    </div>
+
+    <div class="controls">
+      <button class="primary" id="drawBtn">抽一張新卡</button>
+      <button class="secondary" id="flipBtn">翻到價值衝突面</button>
+      <button class="outline" id="resetBtn">重置牌堆</button>
+    </div>
+
+    <div class="grid">
+      <div id="cardHost"></div>
+
+      <div class="side">
+        <div class="mini">
+          <h2>使用方式建議</h2>
+          <p>1. 先抽卡，閱讀正面的情境內容。</p>
+          <p>2. 請學生先討論：這題背後有哪些價值拉扯？</p>
+          <p>3. 再翻到背面，核對卡牌設定的價值衝突。</p>
+          <p>4. 13 張抽完後會自動重新洗牌，再開始下一輪。</p>
+        </div>
+
+        <div class="mini">
+          <h2>目前卡牌範圍</h2>
+          <p>• 個人與他人：2 張</p>
+          <p>• 個人與家庭：2 張</p>
+          <p>• 個人與社會：3 張</p>
+          <p>• 個人與國家：2 張</p>
+          <p>• 個人與自然環境：2 張</p>
+          <p>• 個人與工作專業：2 張</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const cards = [{"id": 1, "category": "個人與他人", "title": "朋友的秘密與他人的安全", "conflict": "友情信任／承諾保密 vs 他人安全／預防傷害責任", "scenario": "你的好朋友最近情緒很低落，私下告訴你他想對某位同學「做點讓對方後悔的事」，還說希望你不要告訴任何人，因為你是他唯一信任的人。你不確定他是在發洩情緒，還是真的可能做出傷害行為。如果你保守秘密，可能讓事情惡化；如果你告訴師長或相關人員，可能失去朋友的信任，甚至讓他覺得被背叛。"}, {"id": 2, "category": "個人與他人", "title": "社群上的玩笑與當事人的感受", "conflict": "群體互動 vs 個人隱私、尊嚴與數位責任", "scenario": "班上聚餐後，一位同學把另一位同學喝醉失態的影片上傳到社群限時動態，還標記了幾位同學。大家覺得很好笑，也有人轉傳到班級群組。隔天，影片中的當事人私下表示自己感到很丟臉，希望發文者刪除影片，也希望大家不要再傳。發文者則認為這只是朋友間的玩笑，沒有惡意，而且影片早就被很多人看過了。你知道這件事，也看到班上同學仍在討論與轉傳。"}, {"id": 3, "category": "個人與家庭", "title": "家庭期待與自我選擇", "conflict": "自我實現／人生自主 vs 家庭期待／責任與穩定價值", "scenario": "你的家人長期支持你讀大學，也一直期待你畢業後選擇穩定、收入固定、社會認可高的工作，例如公職、教師或大型企業職位。但你真正想投入的是一條收入不穩定、風險較高，卻與你興趣與能力更貼近的道路，例如創作、自媒體、新創、自由接案或非典型職涯。家人認為你應該先考慮家庭的期待與未來保障，你則覺得人生應該由自己決定。"}, {"id": 4, "category": "個人與家庭", "title": "家庭困境與學業延續", "conflict": "個人長期發展／教育機會 vs 家庭支持義務／當下現實壓力", "scenario": "家中突然出現經濟困難，父母希望你暫時減少課業投入，甚至考慮休學一段時間去工作，協助分擔家計。你知道如果中斷學業，可能會影響獎學金、延後畢業，甚至改變原本的生涯規劃；但如果你選擇繼續完成學業，家中的經濟壓力可能會落在其他家人身上。家人沒有直接強迫你，但明確表達了希望你能「多為家裡想一點」。"}, {"id": 5, "category": "個人與社會", "title": "目睹不公平對待時的旁觀與介入", "conflict": "社會責任／對不義的敏感與行動 vs 情境不明／自我保護與介入風險", "scenario": "你在校外的餐廳、便利商店或大眾運輸場所，看見一位店員或民眾以帶有歧視意味的語氣對待移工、街友、身心障礙者或其他弱勢者。現場有不少人注意到，但大多數人只是看了一眼便離開，沒有人明顯出面處理。你感到不舒服，也直覺認為這樣的對待不妥；然而，你並不完全了解事件前因後果，也擔心自己若介入，可能會誤判情況、讓衝突升高，甚至影響自身安全。"}, {"id": 6, "category": "個人與社會", "title": "公共爭議中的快速表態與審慎判斷", "conflict": "公共參與／價值立場表達 vs 事實查證／程序正義與理性判斷", "scenario": "某位知名人物、品牌或公共事件在網路上引發高度爭議，社群平台上出現大量批評、抵制與要求表態的聲音。身邊的同學、朋友也紛紛轉發相關內容，認為「不表態就是默許」。你對事件本身有初步看法，也理解社會議題的重要性，但你發現資訊來源片段、說法互相矛盾，還無法確定事情全貌。此時，你感受到來自同儕與社群的壓力，也開始思考自己是否應該立即公開表態。"}, {"id": 7, "category": "個人與社會", "title": "公益參與與履歷導向的矛盾", "conflict": "善意行動／社會參與 vs 功利動機／形式化公益與自我包裝", "scenario": "你參與一個以服務學習、偏鄉服務或社會關懷為名的校內活動。活動在宣傳上強調關懷與奉獻，但你逐漸發現，部分成員參與的主要動機是為了累積履歷、申請研究所、交換或獎學金。活動本身雖然熱鬧、照片也很好看，但你開始懷疑：這些行動是否真正回應了服務對象的需求，還是更像是在滿足參與者自己的成就感與形象。你一方面不想否定大家的投入，一方面又覺得這樣的方式可能有問題。"}, {"id": 8, "category": "個人與國家", "title": "公共政策爭議中的參與責任", "conflict": "公民責任／公共參與 vs 資訊不足／行動風險與判斷壓力", "scenario": "政府近期推動一項引發高度爭議的公共政策，內容涉及教育、勞動、能源、數位治理或社會福利等面向。校園內出現許多討論，也有人發起連署、論壇、集會或其他行動，希望學生表達立場。你認為這項政策確實值得關注，但你對政策細節還沒有完全理解，也不確定自己目前掌握的資訊是否足夠。另一方面，你又覺得作為大學生與公民，面對重大公共議題時似乎不應完全置身事外。"}, {"id": 9, "category": "個人與國家", "title": "安全需求與自由保障的拉扯", "conflict": "公共安全／國家治理效能 vs 自由權、隱私權與民主監督", "scenario": "因應詐騙、假訊息、國家安全或公共秩序問題，政府提出一系列更嚴格的數位管理或公共監控措施，例如提高平台資料調取效率、限制匿名帳號、擴大校園與公共場所的監控設備，或強化網路內容管制。你理解社會確實存在風險，也知道很多人期待政府更有效處理問題；但你同時擔心，若相關措施缺乏足夠監督，可能影響個人隱私、言論自由與民主社會的基本保障。"}, {"id": 10, "category": "個人與自然環境", "title": "便利與成本下的環境選擇", "conflict": "效率、便利與成本控制 vs 環境責任／永續價值與長期影響", "scenario": "你和同學正在籌辦一場大型活動，內容可能是系學會活動、迎新、成果展或校園市集。面對預算有限、時間緊迫、人力不足的情況，最省事的做法是大量使用一次性用品、瓶裝飲料、印刷宣傳品與快速消耗型材料。若改採較環保的方案，例如自備容器、減少印刷、租借重複使用設備或設計回收機制，可能會增加籌備負擔、提高成本，也可能讓參與者覺得不方便。你知道這些選擇會影響活動的順利程度，也意識到它們與環境責任有關。"}, {"id": 11, "category": "個人與自然環境", "title": "學習成果與資源耗用的矛盾", "conflict": "個人表現／成果導向與競爭壓力 vs 資源節制／環境倫理與永續意識", "scenario": "你修的一門課要求完成一項作品、實驗、研究或展演成果。你發現，若採用最容易獲得高評價的方式，可能需要使用大量一次性材料、耗能設備或高資源消耗的製作方法。課程本身並未特別要求考量環境影響，老師評分標準也主要集中在成果品質與完成度。你一方面希望展現能力、爭取好成績，另一方面又開始思考：若為了個人成就而大量耗用資源，是否也牽涉到環境倫理上的責任。"}, {"id": 12, "category": "個人與工作專業", "title": "實習中的不當做法與專業責任", "conflict": "體制適應／自我保護與現實考量 vs 專業倫理／誠信責任與風險意識", "scenario": "你在實習、工讀或專題合作過程中，發現某些做法似乎不太妥當，例如資料紀錄不實、未經同意使用他人資料、把不適合公開的內容傳到群組、請人代簽、要求你在未完整參與的情況下掛名或簽署文件等。這些做法可能被視為「業界常態」或「只是方便處理事情」，周圍的人也沒有明顯反對。你身為學生或新人，位置相對弱勢，若提出質疑，可能影響評價、人際關係或未來合作機會；但若完全接受，也可能違背你對專業誠信的理解。"}, {"id": 13, "category": "個人與工作專業", "title": "使用 AI 工具與成果署名的界線", "conflict": "工具運用／效率與表現提升 vs 真實能力、學習誠信與專業責任", "scenario": "在課堂報告、專題製作、簡報設計、程式撰寫、教案編寫或實習工作中，你大量使用 AI 工具協助生成內容、整理資料、修正文句或完成初稿。最終成果看起來完整、效率也很高，但你心裡清楚，有些內容其實並不是你真正理解後產出的，甚至有部分細節你無法完全解釋。老師或主管目前沒有明確規範 AI 使用方式，只在意成果是否達到要求。你開始思考：在這種情況下，什麼程度的使用算合理？成果又應如何看待其真實性與責任歸屬？"}];
+    let deck = [];
+    let history = [];
+    let currentCard = null;
+    let isFlipped = false;
+
+    function shuffle(array) {
+      const arr = [...array];
+      for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+      }
+      return arr;
+    }
+
+    function refillDeck() {
+      deck = shuffle(cards);
+    }
+
+    function drawCard() {
+      if (deck.length === 0) {
+        refillDeck();
+      }
+      currentCard = deck.pop();
+      history.push(currentCard.id);
+      isFlipped = false;
+      render();
+    }
+
+    function resetDeck() {
+      history = [];
+      refillDeck();
+      currentCard = null;
+      isFlipped = false;
+      drawCard();
+    }
+
+    function progressLabel() {
+      const usedThisRound = 13 - deck.length;
+      return `已抽過 ${usedThisRound} / ${cards.length} 張｜剩餘 ${deck.length} 張`;
+    }
+
+    function renderCardFront(card) {
+      return `
+      <section class="panel light fade">
+        <div class="head">
+          <div class="badge">正面｜情境內容</div>
+          <div class="chips">
+            <span class="chip">${card.category}</span>
+            <span class="chip">卡牌 #${card.id}</span>
+          </div>
+          <h2 class="title">${card.title}</h2>
+        </div>
+        <div class="body">
+          <div class="box">
+            <div class="label">情境敘述</div>
+            <div>${card.scenario}</div>
+          </div>
+          <div class="note">提示：先讓學生閱讀情境，討論這題背後可能有哪些價值拉扯，再翻到背面核對。</div>
+        </div>
+      </section>`;
+    }
+
+    function renderCardBack(card) {
+      return `
+      <section class="panel dark fade">
+        <div class="head">
+          <div class="badge">背面｜價值衝突</div>
+          <div class="chips">
+            <span class="chip">${card.category}</span>
+            <span class="chip">卡牌 #${card.id}</span>
+          </div>
+          <h2 class="title">${card.title}</h2>
+        </div>
+        <div class="body">
+          <div class="box">
+            <div class="label">核心價值衝突</div>
+            <div>${card.conflict}</div>
+          </div>
+          <div class="note">可先請學生比較自己剛剛提出的衝突，和卡牌背面的表述有何異同。</div>
+        </div>
+      </section>`;
+    }
+
+    function render() {
+      const host = document.getElementById("cardHost");
+      const progress = document.getElementById("progressText");
+      const flipBtn = document.getElementById("flipBtn");
+
+      progress.textContent = progressLabel();
+      flipBtn.textContent = isFlipped ? "翻回情境面" : "翻到價值衝突面";
+
+      if (!currentCard) {
+        host.innerHTML = "";
+        return;
+      }
+
+      host.innerHTML = isFlipped ? renderCardBack(currentCard) : renderCardFront(currentCard);
+    }
+
+    document.getElementById("drawBtn").addEventListener("click", drawCard);
+    document.getElementById("flipBtn").addEventListener("click", () => {
+      if (!currentCard) return;
+      isFlipped = !isFlipped;
+      render();
+    });
+    document.getElementById("resetBtn").addEventListener("click", resetDeck);
+
+    resetDeck();
+  </script>
+</body>
+</html>
